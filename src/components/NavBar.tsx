@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function NavBar() {
@@ -11,8 +12,15 @@ export default function NavBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-xl font-bold">
-              JERRY
+            <Link href="/" className="flex items-center gap-6">
+              <span className="text-2xl font-bold tracking-wider">JERRY</span>
+              <Image
+                src="/jerrylesterstudioslogo.svg"
+                alt="Jerry Lester Studios"
+                width={150}
+                height={48}
+                className="w-auto h-8"
+              />
             </Link>
           </div>
 
