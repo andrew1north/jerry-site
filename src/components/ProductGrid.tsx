@@ -61,6 +61,12 @@ export default function ProductGrid({ products }: ProductGridProps) {
             <h3 className="text-sm text-gray-500">{product.name}</h3>
             <p className="text-sm font-light">{product.description}</p>
             <p className="text-sm">${product.price.toFixed(2)}</p>
+            <button
+              onClick={() => handleBuyNow(product.stripeProductId)}
+              className="mt-2 px-4 py-2 bg-black text-white text-sm hover:bg-gray-800 transition-colors"
+            >
+              Buy Now
+            </button>
           </div>
         </motion.div>
       ))}

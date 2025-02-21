@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { ref: inViewRef, inView } = useInView({
+  const { ref: inViewRef } = useInView({
     threshold: 0.5,
   });
 

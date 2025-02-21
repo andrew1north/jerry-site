@@ -1,5 +1,4 @@
 import NavBar from "@/components/NavBar";
-import Image from "next/image";
 
 export default function AboutPage() {
   return (
@@ -11,7 +10,7 @@ export default function AboutPage() {
 
           <div className="prose">
             <p className="text-lg mb-6">
-              Welcome to my creative space. I'm Jerry, a multidisciplinary artist
+              Welcome to my creative space. I&apos;m Jerry, a multidisciplinary artist
               passionate about creating unique and meaningful pieces that tell stories
               and evoke emotions.
             </p>
@@ -19,14 +18,14 @@ export default function AboutPage() {
             <p className="text-lg mb-6">
               My work spans various mediums and techniques, each piece carefully
               crafted to capture moments, ideas, and feelings. Through my portfolio,
-              you'll find a collection of projects that represent my journey and
+              you&apos;ll find a collection of projects that represent my journey and
               artistic vision.
             </p>
 
             <p className="text-lg">
               Feel free to explore my portfolio or visit the shop to find pieces
-              that speak to you. If you'd like to collaborate or have any questions,
-              don't hesitate to reach out.
+              that speak to you. If you&apos;d like to collaborate or have any questions,
+              don&apos;t hesitate to reach out.
             </p>
           </div>
         </div>
