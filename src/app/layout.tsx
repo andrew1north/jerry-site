@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto_Mono } from "next/font/google";
+import { Roboto_Mono, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 
@@ -8,9 +8,19 @@ const robotoMono = Roboto_Mono({
   display: "swap",
 });
 
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Jerry's Portfolio & Shop",
   description: "Portfolio and shop featuring Jerry's creative work",
+  icons: {
+    icon: '/jerrylesterstudioslogo.svg',
+    apple: '/jerrylesterstudioslogo.svg',
+  },
 };
 
 export default function RootLayout({

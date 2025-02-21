@@ -8,19 +8,19 @@ const Footer = () => {
           <nav className="flex space-x-6">
             <Link 
               href="/terms-shipping"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
+              className="text-gray-600 hover:text-gray-900 transition-colors uppercase"
             >
-              TERMS & SHIPPING
+              Terms & Shipping
             </Link>
             <Link 
               href="/contact"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
+              className="text-gray-600 hover:text-gray-900 transition-colors uppercase"
             >
-              CONTACT
+              Contact
             </Link>
           </nav>
         </div>
-        <div className="mt-8 text-center text-sm text-gray-500">
+        <div className="mt-8 text-center text-sm text-gray-500 uppercase">
           © 2025, Jerry Lester Studios All Rights Reserved
         </div>
       </div>
