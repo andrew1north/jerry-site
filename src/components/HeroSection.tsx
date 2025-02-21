@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const { ref: inViewRef } = useInView({
     threshold: 0.5,
   });
@@ -17,6 +18,7 @@ export default function HeroSection() {
       
       videoRef.current.addEventListener('loadeddata', () => {
         console.log('Video loaded successfully');
+        setIsLoaded(true);
       });
 
       // Force reload the video
@@ -25,11 +27,13 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <div ref={inViewRef} className="relative h-screen w-full overflow-hidden">
+    <div ref={inViewRef} className="relative h-screen w-full overflow-hidden bg-black">
       {/* Background Video */}
       <video
         ref={videoRef}
-        className="absolute top-0 left-0 w-full h-full object-cover"
+        className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
         loop
         muted
         playsInline
