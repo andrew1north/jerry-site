@@ -44,13 +44,14 @@ const PORTFOLIO_ITEMS: Record<string, PortfolioItem> = {
 };
 
 type Props = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
-export default function PortfolioItem({ params }: Props) {
-  const item = PORTFOLIO_ITEMS[params.slug];
+export default async function PortfolioItem({ params }: Props) {
+  const resolvedParams = await params;
+  const item = PORTFOLIO_ITEMS[resolvedParams.slug];
 
   if (!item) {
     return (
