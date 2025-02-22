@@ -1,15 +1,9 @@
 import type { Metadata } from "next";
-import { Roboto_Mono, Press_Start_2P } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 
 const robotoMono = Roboto_Mono({ 
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const pressStart2P = Press_Start_2P({
-  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });

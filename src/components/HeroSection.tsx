@@ -11,31 +11,35 @@ export default function HeroSection() {
   });
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.addEventListener('error', (e) => {
+    const videoElement = videoRef.current;
+    
+    if (videoElement) {
+      const handleError = (e: Event) => {
         console.error('Video error:', e);
-      });
+      };
       
-      videoRef.current.addEventListener('loadeddata', () => {
+      const handleLoadedData = () => {
         console.log('Video loaded successfully');
         setIsLoaded(true);
-      });
+      };
 
-      videoRef.current.addEventListener('timeupdate', () => {
-        if (videoRef.current && videoRef.current.currentTime >= 7.6) {
-          videoRef.current.currentTime = 7.2;
+      const handleTimeUpdate = () => {
+        if (videoElement && videoElement.currentTime >= 7.6) {
+          videoElement.currentTime = 7.2;
         }
-      });
+      };
 
-      // Force reload the video
-      videoRef.current.load();
+      videoElement.addEventListener('error', handleError);
+      videoElement.addEventListener('loadeddata', handleLoadedData);
+      videoElement.addEventListener('timeupdate', handleTimeUpdate);
+      videoElement.load();
+
+      return () => {
+        videoElement.removeEventListener('error', handleError);
+        videoElement.removeEventListener('loadeddata', handleLoadedData);
+        videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+      };
     }
-
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.removeEventListener('timeupdate', () => {});
-      }
-    };
   }, []);
 
   return (
