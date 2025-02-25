@@ -1,7 +1,6 @@
 import NavBar from "@/components/NavBar";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 // This would typically come from a CMS or database
 const PRODUCTS = [
@@ -119,18 +118,17 @@ const PRODUCTS = [
   }
 ];
 
-// Generate static params for all products
 export function generateStaticParams() {
   return PRODUCTS.map(product => ({
     id: product.id
   }));
 }
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const product = PRODUCTS.find(p => p.id === params.id);
   
   if (!product) {
-    notFound();
+    return <div>Product not found</div>;
   }
 
   return (

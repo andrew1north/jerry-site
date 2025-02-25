@@ -20,7 +20,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-x divide-y border border-gray-200">
       {products.map((product, index) => (
-        <Link href={`/shop/${product.id}`} key={product.id}>
+        <Link href={`/shop/product/${product.id}`} key={product.id}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
