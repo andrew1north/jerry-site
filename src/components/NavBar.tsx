@@ -27,12 +27,6 @@ export default function NavBar() {
           {/* Desktop menu */}
           <div className="hidden sm:flex sm:items-center sm:space-x-8">
             <Link
-              href="/about"
-              className="text-gray-700 hover:text-gray-900 transition-colors"
-            >
-              About
-            </Link>
-            <Link
               href="/portfolio"
               className="text-gray-700 hover:text-gray-900 transition-colors"
             >
@@ -93,13 +87,6 @@ export default function NavBar() {
       {isMenuOpen && (
         <div className="sm:hidden bg-white/80 backdrop-blur-sm">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              href="/about"
-              className="block px-3 py-2 text-gray-700 hover:text-gray-900"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
             <Link
               href="/portfolio"
               className="block px-3 py-2 text-gray-700 hover:text-gray-900"

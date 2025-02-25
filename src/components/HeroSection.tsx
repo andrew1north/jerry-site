@@ -47,7 +47,7 @@ export default function HeroSection() {
       {/* Background Video */}
       <video
         ref={videoRef}
-        className={`absolute w-full h-full object-cover transition-opacity duration-300 
+        className={`absolute w-full h-full object-cover transition-all duration-1000 ease-in-out
           min-h-[600px] scale-[1.02]
           ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         muted

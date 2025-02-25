@@ -1,32 +1,60 @@
 import NavBar from "@/components/NavBar";
-import InstagramFeed from "@/components/InstagramFeed";
 
 export default function Contact() {
   return (
     <>
       <NavBar />
-      <div className="pt-24">
-        <div className="max-w-4xl mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold mb-8">Contact</h1>
-          <div className="space-y-8">
-            <p className="text-gray-700">
-              For inquiries about artwork, commissions, or any other questions, please reach out:
-            </p>
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                Email:{" "}
-                <a 
-                  href="mailto:Jerrylesterstudios@gmail.com"
-                  className="text-blue-600 hover:text-blue-800 underline"
-                >
-                  Jerrylesterstudios@gmail.com
-                </a>
-              </p>
-              <div>
-                <p className="text-gray-700 mb-4">Follow on Instagram:</p>
-                <InstagramFeed />
-              </div>
-            </div>
+      <div className="pt-24 px-4 max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8">Contact</h1>
+        <div className="text-xl space-y-4">
+          <p>For inquiries about artwork, commissions, or any other questions, please reach out:</p>
+          <p>Email: <a href="mailto:Jerrylesterstudios@gmail.com" className="text-blue-600 hover:underline">Jerrylesterstudios@gmail.com</a></p>
+          <p>Follow on Instagram:</p>
+        </div>
+        <div className="flex justify-center pt-4 pb-12">
+          <div 
+            className="rsme-embed rsme-instagram-embed 866ed22d-4e79-4d50-8829-7bcad4e6975c" 
+            style={{overflow: "hidden", width: "600px", borderRadius: "3px", position: "relative"}}
+          >
+            <style>{`
+              .rsme-embed .rsme-d-none {
+                display: none;
+              }
+              .rsme-embed .twitter-tweet {
+                margin: 0 !important;
+              }
+              .rsme-embed blockquote {
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+              .rsme-embed.rsme-facebook-embed .fb-post iframe {
+                width: 100% !important;
+              }
+              .rsme-embed.rsme-facebook-embed .fb-post span {
+                width: 100% !important;
+              }
+            `}</style>
+            <iframe 
+              className="instagram-media instagram-media-rendered"
+              id="instagram-embed-0"
+              src="https://www.instagram.com/p/C5zEe6VSL2O/embed/?cr=1&v=14&wp=598&rd=https%3A%2F%2Fjerry-site.vercel.app&rp=%2Fcontact"
+              allowFullScreen={true}
+              frameBorder="0"
+              height="474"
+              data-instgrm-payload-id="instagram-media-payload-0"
+              scrolling="no"
+              style={{
+                width: "calc(100% - 2px)",
+                backgroundColor: "white",
+                borderRadius: "3px",
+                border: "1px solid rgb(219, 219, 219)",
+                boxShadow: "none",
+                display: "block",
+                margin: "0px 0px 12px",
+                minWidth: "326px",
+                padding: "0px"
+              }}
+            />
           </div>
         </div>
       </div>
