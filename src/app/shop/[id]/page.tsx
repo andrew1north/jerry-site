@@ -119,7 +119,19 @@ const PRODUCTS = [
   }
 ];
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+// Generate static params for all products
+export function generateStaticParams() {
+  return PRODUCTS.map(product => ({
+    id: product.id
+  }));
+}
+
+type Props = {
+  params: { id: string }
+  searchParams: Record<string, string | string[] | undefined>
+}
+
+export default function ProductPage({ params }: Props) {
   const product = PRODUCTS.find(p => p.id === params.id);
   
   if (!product) {
