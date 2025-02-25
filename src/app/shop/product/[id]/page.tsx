@@ -222,9 +222,9 @@ function ProductPageContent({ product }: { product: typeof PRODUCTS[0] | undefin
 }
 
 // This is a workaround for Next.js 15 type issues
-export default function Page({ params }: { params: { id: string } }) {
-  // Extract the id from params
-  const id = params.id;
+export default function Page(props: any) {
+  // Extract the id from props using type assertion
+  const id = (props.params as { id: string }).id;
   const product = PRODUCTS.find(p => p.id === id);
   
   return <ProductPageContent product={product} />;
