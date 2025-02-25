@@ -126,12 +126,7 @@ export function generateStaticParams() {
   }));
 }
 
-type Props = {
-  params: { id: string }
-  searchParams: Record<string, string | string[] | undefined>
-}
-
-export default function ProductPage({ params }: Props) {
+export default function ProductPage({ params }: { params: { id: string } }) {
   const product = PRODUCTS.find(p => p.id === params.id);
   
   if (!product) {
