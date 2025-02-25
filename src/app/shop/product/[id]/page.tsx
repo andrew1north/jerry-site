@@ -125,14 +125,6 @@ export async function generateStaticParams() {
   }));
 }
 
-// Define the props type for the Page component
-interface ProductPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: Record<string, string | string[] | undefined>;
-}
-
 // Define a simple component to render the product page
 function ProductPageContent({ product }: { product: typeof PRODUCTS[0] | undefined }) {
   if (!product) {
@@ -230,9 +222,9 @@ function ProductPageContent({ product }: { product: typeof PRODUCTS[0] | undefin
 }
 
 // This is a workaround for Next.js 15 type issues
-export default function Page(props: ProductPageProps) {
-  // Extract the id from props
-  const id = props.params?.id;
+export default function Page({ params }: { params: { id: string } }) {
+  // Extract the id from params
+  const id = params.id;
   const product = PRODUCTS.find(p => p.id === id);
   
   return <ProductPageContent product={product} />;
