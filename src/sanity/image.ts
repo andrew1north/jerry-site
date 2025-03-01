@@ -1,15 +1,9 @@
 import createImageUrlBuilder from '@sanity/image-url'
+import type { SanityImageSource as SanityOriginalImageSource } from '@sanity/image-url/lib/types/types'
 import { dataset, projectId } from './env'
 
-// Define a proper type for Sanity image sources
-type SanityImageSource = {
-  asset?: {
-    _ref?: string;
-    _id?: string;
-  };
-  _ref?: string;
-  _id?: string;
-} | null;
+// We're extending the original type to allow null/undefined
+type SanityImageSource = SanityOriginalImageSource | null | undefined
 
 const imageBuilder = createImageUrlBuilder({
   projectId: projectId || '',
@@ -17,5 +11,9 @@ const imageBuilder = createImageUrlBuilder({
 })
 
 export const urlForImage = (source: SanityImageSource) => {
+  // Skip image processing if source is null or undefined
+  if (!source) {
+    return imageBuilder.image(source || '').url()
+  }
   return imageBuilder.image(source).auto('format').fit('max')
 } 
