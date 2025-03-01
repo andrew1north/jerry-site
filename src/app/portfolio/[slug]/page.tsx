@@ -34,7 +34,7 @@ type PortfolioItem = {
 };
 
 // Fetch portfolio item from Sanity
-async function getPortfolioItem(slug: string) {
+async function getPortfolioItem(slug: string): Promise<PortfolioItem | null> {
   const query = groq`*[_type == "portfolio" && slug.current == $slug][0] {
     title,
     description,
@@ -63,11 +63,16 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// Type for Sanity slug response
+type SanitySlug = {
+  slug: string;
+};
+
 // Generate static paths
 export async function generateStaticParams() {
   const query = groq`*[_type == "portfolio"]{ "slug": slug.current }`;
   const slugs = await client.fetch(query);
-  return slugs.map((slug: any) => ({
+  return slugs.map((slug: SanitySlug) => ({
     slug: slug.slug,
   }));
 }
@@ -92,8 +97,8 @@ export default async function Page(props: PageProps) {
   // Extract all images from the portfolio item
   const allImages = [
     item.mainImage?.asset?.url || "/images/placeholder.jpg",
-    ...(item.content?.filter((section: any) => section._type === "imageBlock")
-      .map((section: any) => section.image?.asset?.url)
+    ...(item.content?.filter((section: TextBlock | ImageBlock) => section._type === "imageBlock")
+      .map((section: ImageBlock) => section.image?.asset?.url)
       .filter(Boolean) || [])
   ];
 
@@ -118,11 +123,12 @@ export default async function Page(props: PageProps) {
               <div className="prose max-w-none">
                 <p className="text-lg mb-8 uppercase">{item.description}</p>
 
-                {item.content?.filter((section: any) => section._type === "textBlock").map((section: any, index: number) => (
-                  <div key={index} className="mb-8">
-                    <p className="uppercase">{section.content}</p>
-                  </div>
-                ))}
+                {item.content?.filter((section: TextBlock | ImageBlock) => section._type === "textBlock")
+                  .map((section: TextBlock, index: number) => (
+                    <div key={index} className="mb-8">
+                      <p className="uppercase">{section.content}</p>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
