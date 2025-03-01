@@ -57,14 +57,9 @@ async function getPortfolioItem(slug: string) {
   return client.fetch(query, { slug });
 }
 
-// Use Next.js 15's recommended Page pattern
-type PageProps = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
+// Remove the custom PageProps type and update function signatures
 export async function generateMetadata(
-  { params }: PageProps
+  { params }: { params: { slug: string } }
 ): Promise<Metadata> {
   return {
     title: `Portfolio - ${params.slug}`,
@@ -72,7 +67,7 @@ export async function generateMetadata(
 }
 
 // Page component with correct typing
-export default async function PortfolioItem({ params }: PageProps) {
+export default async function PortfolioItem({ params }: { params: { slug: string } }) {
   // Use non-null assertion to ensure Typescript knows this is a valid value
   const slug = params.slug;
   const item: PortfolioItem | null = await getPortfolioItem(slug);
