@@ -69,6 +69,7 @@ type Props = {
   params: {
     id: string;
   };
+  searchParams: Record<string, string | string[] | undefined>;
 };
 
 // Add this function to handle params properly
