@@ -4,6 +4,7 @@ import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
+import { Metadata } from "next";
 
 type TextBlock = {
   _type: "textBlock";
@@ -56,22 +57,25 @@ async function getPortfolioItem(slug: string) {
   return client.fetch(query, { slug });
 }
 
-type Props = {
-  params: {
-    slug: string;
-  };
-  searchParams: Record<string, string | string[] | undefined>;
-};
+// Use Next.js 15's recommended Page pattern
+type PageProps = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
 
-// Add this function to handle params properly
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata(
+  { params }: PageProps
+): Promise<Metadata> {
   return {
     title: `Portfolio - ${params.slug}`,
   };
 }
 
-export default async function PortfolioItem({ params }: Props) {
-  const item: PortfolioItem | null = await getPortfolioItem(params.slug);
+// Page component with correct typing
+export default async function PortfolioItem({ params }: PageProps) {
+  // Use non-null assertion to ensure Typescript knows this is a valid value
+  const slug = params.slug;
+  const item: PortfolioItem | null = await getPortfolioItem(slug);
 
   if (!item) {
     notFound();
