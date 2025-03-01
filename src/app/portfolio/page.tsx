@@ -1,33 +1,41 @@
 import NavBar from "@/components/NavBar";
 import PortfolioGrid from "@/components/PortfolioGrid";
+import { client } from "@/sanity/client";
+import { groq } from "next-sanity";
 
-// This would typically come from a CMS or database
-const PORTFOLIO_ITEMS = [
-  {
-    id: "1",
-    title: "Project One",
-    description: "Description of project one",
-    imageUrl: "/images/portfolio-1.jpg",
-    slug: "project-one",
-  },
-  {
-    id: "2",
-    title: "Project Two",
-    description: "Description of project two",
-    imageUrl: "/images/portfolio-2.jpg",
-    slug: "project-two",
-  },
-  // Add more items as needed
-];
+// Fetch portfolio items from Sanity
+async function getPortfolioItems() {
+  const query = groq`*[_type == "portfolio"] {
+    _id,
+    title,
+    description,
+    "slug": slug.current,
+    "imageUrl": mainImage.asset->url
+  }`;
+  
+  return client.fetch(query);
+}
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const portfolioItems = await getPortfolioItems();
+  
   return (
     <>
       <NavBar />
       <div className="pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-4xl font-bold mb-8">Portfolio</h1>
-          <PortfolioGrid items={PORTFOLIO_ITEMS} />
+          {portfolioItems && portfolioItems.length > 0 ? (
+            <PortfolioGrid items={portfolioItems.map(item => ({
+              id: item._id,
+              title: item.title,
+              description: item.description || "",
+              imageUrl: item.imageUrl || "/images/placeholder.jpg",
+              slug: item.slug
+            }))} />
+          ) : (
+            <p className="text-center text-gray-500">No portfolio items found. Add some in Sanity Studio!</p>
+          )}
         </div>
       </div>
     </>
