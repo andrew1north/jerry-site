@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
 import { Metadata } from "next";
 
+// Define types for internal use only
 type TextBlock = {
   _type: "textBlock";
   content: string;
@@ -57,20 +58,32 @@ async function getPortfolioItem(slug: string) {
   return client.fetch(query, { slug });
 }
 
-// Remove the custom PageProps type and update function signatures
-export async function generateMetadata(
-  { params }: { params: { slug: string } }
-): Promise<Metadata> {
+// Define the correct type for Next.js 15 params
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+// Generate static paths
+export async function generateStaticParams() {
+  const query = groq`*[_type == "portfolio"]{ "slug": slug.current }`;
+  const slugs = await client.fetch(query);
+  return slugs.map((slug: any) => ({
+    slug: slug.slug,
+  }));
+}
+
+// Metadata generation
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const { slug } = await props.params;
   return {
-    title: `Portfolio - ${params.slug}`,
+    title: `Portfolio - ${slug}`,
   };
 }
 
-// Page component with correct typing
-export default async function PortfolioItem({ params }: { params: { slug: string } }) {
-  // Use non-null assertion to ensure Typescript knows this is a valid value
-  const slug = params.slug;
-  const item: PortfolioItem | null = await getPortfolioItem(slug);
+// Page component
+export default async function Page(props: PageProps) {
+  const { slug } = await props.params;
+  const item = await getPortfolioItem(slug);
 
   if (!item) {
     notFound();
@@ -79,8 +92,8 @@ export default async function PortfolioItem({ params }: { params: { slug: string
   // Extract all images from the portfolio item
   const allImages = [
     item.mainImage?.asset?.url || "/images/placeholder.jpg",
-    ...(item.content?.filter(section => section._type === "imageBlock")
-      .map(section => (section as ImageBlock).image?.asset?.url)
+    ...(item.content?.filter((section: any) => section._type === "imageBlock")
+      .map((section: any) => section.image?.asset?.url)
       .filter(Boolean) || [])
   ];
 
@@ -105,9 +118,9 @@ export default async function PortfolioItem({ params }: { params: { slug: string
               <div className="prose max-w-none">
                 <p className="text-lg mb-8 uppercase">{item.description}</p>
 
-                {item.content?.filter(section => section._type === "textBlock").map((section, index) => (
+                {item.content?.filter((section: any) => section._type === "textBlock").map((section: any, index: number) => (
                   <div key={index} className="mb-8">
-                    <p className="uppercase">{(section as TextBlock).content}</p>
+                    <p className="uppercase">{section.content}</p>
                   </div>
                 ))}
               </div>
