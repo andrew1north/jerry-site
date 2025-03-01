@@ -37,7 +37,7 @@ type Product = {
 };
 
 // Fetch product from Sanity
-async function getProduct(id: string) {
+async function getProduct(id: string): Promise<Product | null> {
   const query = groq`*[_type == "product" && _id == $id][0] {
     _id,
     name,
@@ -65,22 +65,23 @@ async function getProduct(id: string) {
   return client.fetch(query, { id });
 }
 
+// Update Props type to handle Next.js 15's Promise-based params
 type Props = {
-  params: {
-    id: string;
-  };
-  searchParams: Record<string, string | string[] | undefined>;
+  params: Promise<{ id: string }>;
 };
 
-// Add this function to handle params properly
-export async function generateMetadata({ params }: Props) {
+// Update metadata generation to properly await params
+export async function generateMetadata(props: Props) {
+  const { id } = await props.params;
   return {
-    title: `Product - ${params.id}`,
+    title: `Product - ${id}`,
   };
 }
 
-export default async function ProductPage({ params }: Props) {
-  const product: Product | null = await getProduct(params.id);
+// Update page component to properly await params
+export default async function ProductPage(props: Props) {
+  const { id } = await props.params;
+  const product: Product | null = await getProduct(id);
 
   if (!product) {
     notFound();
