@@ -3,8 +3,17 @@ import PortfolioGrid from "@/components/PortfolioGrid";
 import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 
+// Define the type for portfolio items from Sanity
+interface PortfolioItem {
+  _id: string;
+  title: string;
+  description?: string;
+  slug: string;
+  imageUrl?: string;
+}
+
 // Fetch portfolio items from Sanity
-async function getPortfolioItems() {
+async function getPortfolioItems(): Promise<PortfolioItem[]> {
   const query = groq`*[_type == "portfolio"] {
     _id,
     title,
@@ -26,7 +35,7 @@ export default async function PortfolioPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-4xl font-bold mb-8">Portfolio</h1>
           {portfolioItems && portfolioItems.length > 0 ? (
-            <PortfolioGrid items={portfolioItems.map(item => ({
+            <PortfolioGrid items={portfolioItems.map((item: PortfolioItem) => ({
               id: item._id,
               title: item.title,
               description: item.description || "",
