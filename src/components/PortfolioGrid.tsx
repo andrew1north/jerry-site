@@ -3,12 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import VideoThumbnail from "./VideoThumbnail";
 
 type PortfolioItem = {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  videoThumbnailUrl?: string;
   slug: string;
 };
 
@@ -31,12 +34,21 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
         >
           <Link href={`/portfolio/${item.slug}`} className="group">
             <div className="relative aspect-square overflow-hidden rounded-lg">
-              <Image
-                src={item.imageUrl}
-                alt={item.title}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+              {item.videoUrl ? (
+                <VideoThumbnail 
+                  videoUrl={item.videoUrl}
+                  thumbnailUrl={item.videoThumbnailUrl}
+                  alt={item.title}
+                  className="transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : (
+                <Image
+                  src={item.imageUrl || "/images/placeholder.jpg"}
+                  alt={item.title}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                   <h3 className="text-xl font-semibold mb-2">{item.title}</h3>

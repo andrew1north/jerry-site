@@ -30,6 +30,25 @@ const portfolioSchema = {
         name: 'mainImage',
         title: 'Main Image',
         type: 'image',
+        description: 'Main image for the portfolio item. Leave empty if using a video instead.',
+        options: {
+          hotspot: true,
+        }
+      },
+      {
+        name: 'mainVideo',
+        title: 'Main Video',
+        type: 'file',
+        description: 'Main video for the portfolio item. Leave empty if using an image instead.',
+        options: {
+          accept: 'video/*'
+        }
+      },
+      {
+        name: 'mainVideoThumbnail',
+        title: 'Main Video Thumbnail',
+        type: 'image',
+        description: 'Thumbnail for the main video (optional)',
         options: {
           hotspot: true,
         }
@@ -68,6 +87,57 @@ const portfolioSchema = {
                 name: 'caption',
                 title: 'Caption',
                 type: 'string'
+              }
+            ]
+          },
+          {
+            title: 'Video Block',
+            type: 'object',
+            name: 'videoBlock',
+            fields: [
+              {
+                name: 'video',
+                title: 'Video',
+                type: 'file',
+                description: 'Upload a video file',
+                options: {
+                  accept: 'video/*'
+                }
+              },
+              {
+                name: 'caption',
+                title: 'Caption',
+                type: 'string'
+              },
+              {
+                name: 'autoPlay',
+                title: 'Auto Play',
+                type: 'boolean',
+                description: 'Should the video auto-play when in view?',
+                initialValue: false
+              },
+              {
+                name: 'loop',
+                title: 'Loop',
+                type: 'boolean',
+                description: 'Should the video loop?',
+                initialValue: true
+              },
+              {
+                name: 'muted',
+                title: 'Muted',
+                type: 'boolean',
+                description: 'Should the video be muted by default?',
+                initialValue: true
+              },
+              {
+                name: 'thumbnail',
+                title: 'Thumbnail',
+                type: 'image',
+                description: 'Optional thumbnail for the video',
+                options: {
+                  hotspot: true,
+                }
               }
             ]
           }

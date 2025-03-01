@@ -13,7 +13,7 @@ export default function NavBar() {
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-6">
-              <span className="text-2xl font-bold tracking-wider">JERRY</span>
+              <span className="text-2xl font-bold tracking-wider">JERRY LESTER |</span>
               <Image
                 src="/jerrylesterstudioslogo.svg"
                 alt="Jerry Lester Studios"

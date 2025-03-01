@@ -10,6 +10,8 @@ interface PortfolioItem {
   description?: string;
   slug: string;
   imageUrl?: string;
+  videoUrl?: string;
+  videoThumbnailUrl?: string;
 }
 
 // Fetch portfolio items from Sanity
@@ -19,7 +21,9 @@ async function getPortfolioItems(): Promise<PortfolioItem[]> {
     title,
     description,
     "slug": slug.current,
-    "imageUrl": mainImage.asset->url
+    "imageUrl": mainImage.asset->url,
+    "videoUrl": mainVideo.asset->url,
+    "videoThumbnailUrl": mainVideoThumbnail.asset->url
   }`;
   
   return client.fetch(query);
@@ -39,7 +43,9 @@ export default async function PortfolioPage() {
               id: item._id,
               title: item.title,
               description: item.description || "",
-              imageUrl: item.imageUrl || "/images/placeholder.jpg",
+              imageUrl: item.imageUrl,
+              videoUrl: item.videoUrl,
+              videoThumbnailUrl: item.videoThumbnailUrl,
               slug: item.slug
             }))} />
           ) : (

@@ -4,6 +4,7 @@ import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 import ImageGallery from "@/components/ImageGallery";
+import VideoPlayer from "@/components/VideoPlayer";
 import { Metadata } from "next";
 
 // Define types for internal use only
@@ -22,15 +23,47 @@ type ImageBlock = {
   caption: string;
 };
 
-type PortfolioItem = {
-  title: string;
-  description: string;
-  mainImage: {
+type VideoBlock = {
+  _type: "videoBlock";
+  video: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  thumbnail?: {
     asset: {
       url: string;
     };
   };
-  content: (TextBlock | ImageBlock)[];
+  caption: string;
+  autoPlay: boolean;
+  loop: boolean;
+  muted: boolean;
+};
+
+type ContentBlock = TextBlock | ImageBlock | VideoBlock;
+
+type PortfolioItem = {
+  title: string;
+  description: string;
+  mainImage?: {
+    asset: {
+      url: string;
+    };
+  };
+  mainVideo?: {
+    asset: {
+      _ref: string;
+      url: string;
+    };
+  };
+  mainVideoThumbnail?: {
+    asset: {
+      url: string;
+    };
+  };
+  content: ContentBlock[];
 };
 
 // Fetch portfolio item from Sanity
@@ -38,10 +71,17 @@ async function getPortfolioItem(slug: string): Promise<PortfolioItem | null> {
   const query = groq`*[_type == "portfolio" && slug.current == $slug][0] {
     title,
     description,
-    "mainImage": {
+    "mainImage": mainImage.asset->{
+      "url": url
+    },
+    "mainVideo": {
       "asset": {
-        "url": mainImage.asset->url
+        "_ref": mainVideo.asset._ref,
+        "url": mainVideo.asset->url
       }
+    },
+    "mainVideoThumbnail": mainVideoThumbnail.asset->{
+      "url": url
     },
     content[] {
       _type,
@@ -51,7 +91,19 @@ async function getPortfolioItem(slug: string): Promise<PortfolioItem | null> {
           "url": image.asset->url
         }
       },
-      caption
+      caption,
+      "video": {
+        "asset": {
+          "_ref": video.asset._ref,
+          "url": video.asset->url
+        }
+      },
+      "thumbnail": thumbnail.asset->{
+        "url": url
+      },
+      autoPlay,
+      loop,
+      muted
     }
   }`;
   
@@ -96,11 +148,13 @@ export default async function Page(props: PageProps) {
 
   // Extract all images from the portfolio item
   const allImages = [
-    item.mainImage?.asset?.url || "/images/placeholder.jpg",
-    ...(item.content?.filter((section: TextBlock | ImageBlock) => section._type === "imageBlock")
+    ...(item.mainImage?.asset?.url ? [item.mainImage.asset.url] : []),
+    ...(item.content?.filter((section: ContentBlock) => section._type === "imageBlock")
       .map((section: ImageBlock) => section.image?.asset?.url)
       .filter(Boolean) || [])
   ];
+
+  const hasMainVideo = !!item.mainVideo?.asset?.url;
 
   return (
     <>
@@ -112,9 +166,41 @@ export default async function Page(props: PageProps) {
           </Link>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Portfolio Image Gallery */}
+            {/* Portfolio Media */}
             <div className="md:col-span-1">
-              <ImageGallery images={allImages} altText={item.title} />
+              {hasMainVideo ? (
+                <div className="mb-8">
+                  <VideoPlayer 
+                    video={item.mainVideo!}
+                    thumbnail={item.mainVideoThumbnail}
+                    autoPlay={true}
+                    loop={true}
+                    muted={true}
+                  />
+                </div>
+              ) : allImages.length > 0 ? (
+                <ImageGallery images={allImages} altText={item.title} />
+              ) : (
+                <div className="bg-gray-200 aspect-video flex items-center justify-center">
+                  No media available
+                </div>
+              )}
+              
+              {/* Additional Video Content */}
+              {item.content?.filter((section: ContentBlock) => 
+                section._type === "videoBlock"
+              ).map((section: VideoBlock, index: number) => (
+                <div key={`video-${index}`} className="mt-8">
+                  <VideoPlayer 
+                    video={section.video}
+                    thumbnail={section.thumbnail}
+                    caption={section.caption}
+                    autoPlay={section.autoPlay}
+                    loop={section.loop}
+                    muted={section.muted}
+                  />
+                </div>
+              ))}
             </div>
             
             {/* Portfolio Info */}
@@ -123,7 +209,7 @@ export default async function Page(props: PageProps) {
               <div className="prose max-w-none">
                 <p className="text-lg mb-8 uppercase">{item.description}</p>
 
-                {item.content?.filter((section: TextBlock | ImageBlock) => section._type === "textBlock")
+                {item.content?.filter((section: ContentBlock) => section._type === "textBlock")
                   .map((section: TextBlock, index: number) => (
                     <div key={index} className="mb-8">
                       <p className="uppercase">{section.content}</p>
