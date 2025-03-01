@@ -1,3 +1,5 @@
+import { Rule } from 'sanity'
+
 const portfolioSchema = {
     name: 'portfolio',
     title: 'Portfolio',
@@ -7,7 +9,7 @@ const portfolioSchema = {
         name: 'title',
         title: 'Title',
         type: 'string',
-        validation: Rule => Rule.required()
+        validation: (Rule: Rule) => Rule.required()
       },
       {
         name: 'slug',
@@ -17,7 +19,7 @@ const portfolioSchema = {
           source: 'title',
           maxLength: 96,
         },
-        validation: Rule => Rule.required()
+        validation: (Rule: Rule) => Rule.required()
       },
       {
         name: 'description',

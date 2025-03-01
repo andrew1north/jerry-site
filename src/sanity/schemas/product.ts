@@ -1,3 +1,5 @@
+import { Rule } from 'sanity'
+
 const productSchema = {
     name: 'product',
     title: 'Product',
@@ -7,7 +9,7 @@ const productSchema = {
         name: 'name',
         title: 'Name',
         type: 'string',
-        validation: Rule => Rule.required()
+        validation: (Rule: Rule) => Rule.required()
       },
       {
         name: 'slug',
@@ -17,7 +19,7 @@ const productSchema = {
           source: 'name',
           maxLength: 96,
         },
-        validation: Rule => Rule.required()
+        validation: (Rule: Rule) => Rule.required()
       },
       {
         name: 'description',
@@ -28,7 +30,7 @@ const productSchema = {
         name: 'price',
         title: 'Price',
         type: 'number',
-        validation: Rule => Rule.required().min(0)
+        validation: (Rule: Rule) => Rule.required().min(0)
       },
       {
         name: 'mainImage',
