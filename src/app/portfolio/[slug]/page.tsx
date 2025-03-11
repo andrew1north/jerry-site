@@ -7,6 +7,9 @@ import ImageGallery from "@/components/ImageGallery";
 import VideoPlayer from "@/components/VideoPlayer";
 import { Metadata } from "next";
 
+// Enable Incremental Static Regeneration with a 1-hour cache
+export const revalidate = 3600;
+
 // Define types for internal use only
 type TextBlock = {
   _type: "textBlock";

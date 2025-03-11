@@ -3,6 +3,9 @@ import PortfolioGrid from "@/components/PortfolioGrid";
 import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 
+// Enable Incremental Static Regeneration with a 1-hour cache
+export const revalidate = 3600;
+
 // Define the type for portfolio items from Sanity
 interface PortfolioItem {
   _id: string;

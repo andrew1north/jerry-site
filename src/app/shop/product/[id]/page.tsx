@@ -7,10 +7,18 @@ import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 
 type ProductDimensions = {
-  width: string;
-  depth: string;
-  height: string;
-  weight: string;
+  width?: string;
+  depth?: string;
+  height?: string;
+  weight?: string;
+  length?: string;
+  inseam?: string;
+  waist?: string;
+  rise?: string;
+  size?: string;
+  legOpening?: string;
+  armOpening?: string;
+  shoulderToSleeve?: string;
 };
 
 type ProductDetails = {
@@ -57,7 +65,15 @@ async function getProduct(id: string): Promise<Product | null> {
         width,
         depth,
         height,
-        weight
+        weight,
+        length,
+        inseam,
+        waist,
+        rise,
+        size,
+        legOpening,
+        armOpening,
+        shoulderToSleeve
       }
     }
   }`;
@@ -202,6 +218,54 @@ export default async function ProductPage(props: Props) {
                       <div>
                         <p className="font-bold uppercase">WEIGHT</p>
                         <p>{product.details.dimensions.weight}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.length && (
+                      <div>
+                        <p className="font-bold uppercase">LENGTH</p>
+                        <p>{product.details.dimensions.length}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.inseam && (
+                      <div>
+                        <p className="font-bold uppercase">INSEAM</p>
+                        <p>{product.details.dimensions.inseam}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.waist && (
+                      <div>
+                        <p className="font-bold uppercase">WAIST</p>
+                        <p>{product.details.dimensions.waist}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.rise && (
+                      <div>
+                        <p className="font-bold uppercase">RISE</p>
+                        <p>{product.details.dimensions.rise}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.size && (
+                      <div>
+                        <p className="font-bold uppercase">SIZE</p>
+                        <p>{product.details.dimensions.size}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.legOpening && (
+                      <div>
+                        <p className="font-bold uppercase">LEG OPENING</p>
+                        <p>{product.details.dimensions.legOpening}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.armOpening && (
+                      <div>
+                        <p className="font-bold uppercase">ARM OPENING</p>
+                        <p>{product.details.dimensions.armOpening}</p>
+                      </div>
+                    )}
+                    {product.details.dimensions.shoulderToSleeve && (
+                      <div>
+                        <p className="font-bold uppercase">SHOULDER TO SLEEVE</p>
+                        <p>{product.details.dimensions.shoulderToSleeve}</p>
                       </div>
                     )}
                   </div>

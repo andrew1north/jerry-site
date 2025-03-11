@@ -70,7 +70,15 @@ const productSchema = {
               { name: 'width', title: 'Width', type: 'string' },
               { name: 'depth', title: 'Depth', type: 'string' },
               { name: 'height', title: 'Height', type: 'string' },
-              { name: 'weight', title: 'Weight', type: 'string' }
+              { name: 'weight', title: 'Weight', type: 'string' },
+              { name: 'length', title: 'Length', type: 'string' },
+              { name: 'inseam', title: 'Inseam', type: 'string' },
+              { name: 'waist', title: 'Waist', type: 'string' },
+              { name: 'rise', title: 'Rise', type: 'string' },
+              { name: 'size', title: 'Size', type: 'string' },
+              { name: 'legOpening', title: 'Leg Opening', type: 'string' },
+              { name: 'armOpening', title: 'Arm Opening', type: 'string' },
+              { name: 'shoulderToSleeve', title: 'Shoulder to Sleeve', type: 'string' }
             ]
           }
         ]

@@ -3,6 +3,9 @@ import ProductGrid from "@/components/ProductGrid";
 import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 
+// Enable Incremental Static Regeneration with a 1-hour cache
+export const revalidate = 3600;
+
 // Define the type for products from Sanity
 interface Product {
   _id: string;
@@ -19,6 +22,14 @@ interface Product {
       depth?: string;
       height?: string;
       weight?: string;
+      length?: string;
+      inseam?: string;
+      waist?: string;
+      rise?: string;
+      size?: string;
+      legOpening?: string;
+      armOpening?: string;
+      shoulderToSleeve?: string;
     };
   };
 }
@@ -39,7 +50,15 @@ async function getProducts(): Promise<Product[]> {
         width,
         depth,
         height,
-        weight
+        weight,
+        length,
+        inseam,
+        waist,
+        rise,
+        size,
+        legOpening,
+        armOpening,
+        shoulderToSleeve
       }
     }
   }`;
