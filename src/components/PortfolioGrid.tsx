@@ -52,7 +52,11 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                   <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-sm">{item.description}</p>
+                  <p className="text-sm">
+                    {item.description.length > 120 
+                      ? `${item.description.substring(0, 120)}...` 
+                      : item.description}
+                  </p>
                 </div>
               </div>
             </div>

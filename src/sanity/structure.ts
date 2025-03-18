@@ -16,4 +16,10 @@ export const structure = (S: StructureBuilder) =>
         .title('Products')
         .schemaType('product')
         .child(S.documentTypeList('product').title('Products')),
+        
+      // Photo Collections section
+      S.listItem()
+        .title('Photo Collections')
+        .schemaType('photoCollection')
+        .child(S.documentTypeList('photoCollection').title('Photo Collections')),
     ]) 

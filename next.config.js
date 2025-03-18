@@ -2,12 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['cdn.sanity.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
   },
-  typescript: {
-    // Use the IDE for type checking during development
-    ignoreBuildErrors: false, 
-  },
+  // Type checking is now enabled during build
 };
 
 module.exports = nextConfig; 
