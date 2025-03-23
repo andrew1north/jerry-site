@@ -1,10 +1,10 @@
 import React from 'react';
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
-import Image from "next/image";
 import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
+import ImageGallery from './ImageGallery';
 
 type ProductDimensions = {
   width?: string;
@@ -130,33 +130,10 @@ export default async function ProductPage(props: Props) {
         <div className="flex flex-col md:flex-row gap-8 py-6">
           {/* Product Image - Left Side */}
           <div className="md:w-1/2">
-            {mainImageUrl && (
-              <div className="relative w-full h-[500px]">
-                <Image 
-                  src={mainImageUrl}
-                  alt={product.name || "Product Image"}
-                  fill
-                  style={{ objectFit: "contain" }}
-                  priority
-                />
-              </div>
-            )}
-            
-            {/* Additional images thumbnails if available */}
-            {allImages.length > 1 && (
-              <div className="flex mt-4 gap-2 overflow-x-auto">
-                {allImages.map((imgUrl, index) => (
-                  <div key={index} className="w-20 h-20 relative flex-shrink-0">
-                    <Image
-                      src={imgUrl}
-                      alt={`${product.name} - view ${index + 1}`}
-                      fill
-                      style={{ objectFit: "cover" }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+            <ImageGallery 
+              images={allImages}
+              productName={product.name}
+            />
           </div>
 
           {/* Product Info - Right Side */}
