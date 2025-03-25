@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
@@ -22,6 +23,15 @@ const Footer = () => {
         </div>
         <div className="mt-8 text-center text-sm text-gray-500 uppercase">
           © 2025, Jerry Lester Studios All Rights Reserved
+        </div>
+        <div className="mt-8 flex justify-center">
+          <Image 
+            src="/images/Artboard 1.webp" 
+            alt="Jerry Lester Studios" 
+            width={200}
+            height={100}
+            className="object-contain"
+          />
         </div>
       </div>
     </footer>

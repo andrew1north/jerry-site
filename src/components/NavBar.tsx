@@ -194,11 +194,11 @@ export default function NavBar() {
             <nav className="flex flex-col space-y-8">
               {/* All menu items for mobile */}
               {[
-                { name: 'Portfolio', href: '/portfolio', mobileOnly: true },
-                { name: 'Shop', href: '/shop', mobileOnly: true },
                 { name: 'About', href: '/about', mobileOnly: false },
                 { name: 'Photos', href: '/photos', mobileOnly: false },
                 { name: 'Listen', href: '/listen', mobileOnly: false },
+                { name: 'Portfolio', href: '/portfolio', mobileOnly: true },
+                { name: 'Shop', href: '/shop', mobileOnly: true },
                 { name: 'Contact', href: '/contact', mobileOnly: false }
               ].map((item, index) => (
                 <Link

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import GameStart from "./GameStart";
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -61,6 +62,9 @@ export default function HeroSection() {
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/30" />
+      
+      {/* GameStart component */}
+      <GameStart />
     </div>
   );
 } 

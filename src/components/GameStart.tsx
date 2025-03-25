@@ -43,7 +43,7 @@ export default function GameStart() {
 
   return (
     <>
-      <div className={`fixed inset-x-0 bottom-16 md:bottom-24 flex flex-col items-center gap-3 pointer-events-none transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute inset-x-0 bottom-16 md:bottom-24 z-10 flex flex-col items-center gap-3 pointer-events-none transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
         <PressStart className="animate-pulse" />
         <PlayButton 
           className="pointer-events-auto cursor-pointer" 
