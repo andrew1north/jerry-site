@@ -37,7 +37,7 @@ export default function Contact() {
             <iframe 
               className="instagram-media instagram-media-rendered"
               id="instagram-embed-0"
-              src="https://www.instagram.com/p/C5zEe6VSL2O/embed/?cr=1&v=14&wp=598&rd=https%3A%2F%2Fjerry-site.vercel.app&rp=%2Fcontact"
+              src="https://www.instagram.com/p/C5zEe6VSL2O/embed/?cr=1&v=14&wp=598&rd=https%3A%2F%2Fjerry-lester.com&rp=%2Fcontact"
               allowFullScreen={true}
               frameBorder="0"
               height="474"
