@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/jerrylesterstudioslogo.svg',
     shortcut: '/jerrylesterstudioslogo.svg',
-    apple: '/jerrylesterstudioslogo.svg',
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     type: 'website',
@@ -24,15 +24,15 @@ export const metadata: Metadata = {
     description: 'Jerry Lester is a multidisciplinary artist blending fine art, fashion design, and creative storytelling.',
     siteName: 'Jerry Lester Studios',
     images: [{
-      url: '/jerrylesterstudioslogo.svg',
-      width: 800,
-      height: 600,
+      url: '/og-image.png',
+      width: 1200,
+      height: 1200,
       alt: 'Jerry Lester Studios Logo'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    images: '/jerrylesterstudioslogo.svg'
+    images: '/og-image.png'
   }
 };
 
@@ -45,6 +45,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/jerrylesterstudioslogo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className={`${robotoMono.className} uppercase text-black`}>
         <main className="min-h-screen bg-white">
