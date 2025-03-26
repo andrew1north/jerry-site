@@ -13,13 +13,9 @@ export const metadata: Metadata = {
   title: "Jerry Lester",
   description: "Jerry Lester is a multidisciplinary artist blending fine art, fashion design, and creative storytelling. With roots in Philadelphia and a background in chemical engineering, Jerry brings a unique perspective to his work—drawing inspiration from his upbringing, personal journey, and the environments that shaped him. Explore a portfolio that spans drawing, painting, sewing, and more, all under the creative vision of Jerry Lester Studios.",
   icons: {
-    icon: '/logo.png', // This is for favicon and tab icon
-    // If you want Apple-specific icons, you can also add:
-    apple: '/logo.png',
-  },
-  openGraph: {
-    images: ['/logo.png'], // Using same logo for social previews
-  },
+    icon: '/jerrylesterstudioslogo.svg',
+    apple: '/jerrylesterstudioslogo.svg',
+  }
 };
 
 export default function RootLayout({
