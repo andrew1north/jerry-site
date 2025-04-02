@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import { Analytics } from "@vercel/analytics/react"
+
 
 const robotoMono = Roboto_Mono({ 
   subsets: ["latin"],
@@ -52,6 +54,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
