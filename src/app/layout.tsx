@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/jerrylesterstudioslogo.svg',
     shortcut: '/jerrylesterstudioslogo.svg',
-    apple: '/apple-touch-icon.png',
+    apple: '/jerrylester-iphone.svg',
   },
   openGraph: {
     type: 'website',
@@ -45,7 +45,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/jerrylesterstudioslogo.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" href="/jerrylester-iphone.svg" type="image/svg+xml" />
       </head>
       <body className={`${robotoMono.className} uppercase text-black`}>
         <main className="min-h-screen bg-white">
