@@ -1,0 +1,195 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+This diagram shows the complete structure and data flow of the Jerry Lester Studios website.
+graph TD
+    %% External Data Sources
+    SANITY[("Sanity CMS<br/>- Portfolio Items<br/>- Products<br/>- Photo Collections")]
+    APPLE["Apple Music<br/>Playlists"]
+    INSTAGRAM["Instagram<br/>Embed"]
+    
+    %% Public Directory
+    PUBLIC["/public/<br/>📁 Static Assets"]
+    IMAGES["/public/images/<br/>- jerry-about.jpg<br/>- Artboard 1.webp<br/>- jerrylester-iphone.svg"]
+    VIDEOS["/public/videos/<br/>- intro_crop.mp4<br/>- intro_crop.mov"]
+    LOGOS["/public/<br/>- jerrylesterstudioslogo.svg<br/>- og-image.png<br/>- apple-touch-icon.png"]
+    
+    PUBLIC --> IMAGES
+    PUBLIC --> VIDEOS  
+    PUBLIC --> LOGOS
+    
+    %% Source Directory Structure
+    SRC["/src/<br/>📁 Application Source"]
+    
+    %% App Directory (Pages)
+    APP["/src/app/<br/>📁 Next.js App Router"]
+    HOME["page.tsx<br/>🏠 Home Page"]
+    ABOUT["about/page.tsx<br/>ℹ️ About Page"]
+    PORTFOLIO_PAGE["portfolio/page.tsx<br/>🎨 Portfolio List"]
+    PORTFOLIO_DETAIL["portfolio/[slug]/page.tsx<br/>🎨 Portfolio Detail"]
+    SHOP_PAGE["shop/page.tsx<br/>🛒 Shop List"]
+    PRODUCT_DETAIL["shop/product/[id]/page.tsx<br/>🛒 Product Detail"]
+    PHOTOS_PAGE["photos/page.tsx<br/>📷 Photo Collections"]
+    PHOTO_DETAIL["photos/[slug]/page.tsx<br/>📷 Photo Collection Detail"]
+    LISTEN["listen/page.tsx<br/>🎵 Music Playlists"]
+    CONTACT["contact/page.tsx<br/>📞 Contact Info"]
+    TERMS["terms-shipping/page.tsx<br/>📋 Terms & Shipping"]
+    
+    SRC --> APP
+    APP --> HOME
+    APP --> ABOUT
+    APP --> PORTFOLIO_PAGE
+    APP --> PORTFOLIO_DETAIL
+    APP --> SHOP_PAGE
+    APP --> PRODUCT_DETAIL
+    APP --> PHOTOS_PAGE
+    APP --> PHOTO_DETAIL
+    APP --> LISTEN
+    APP --> CONTACT
+    APP --> TERMS
+    
+    %% API Routes
+    API["/src/app/api/<br/>📡 API Routes"]
+    CHECKOUT["checkout/route.ts<br/>💳 Payment Processing"]
+    REVALIDATE["revalidate/route.ts<br/>🔄 Cache Invalidation"]
+    
+    APP --> API
+    API --> CHECKOUT
+    API --> REVALIDATE
+    
+    %% Components Directory
+    COMPONENTS["/src/components/<br/>📦 Reusable Components"]
+    
+    %% Navigation Components
+    NAV_COMPONENTS["Navigation<br/>- NavBar.tsx<br/>- HomeNavBar.tsx<br/>- Footer.tsx"]
+    
+    %% Media Components
+    MEDIA_COMPONENTS["Media<br/>- VideoPlayer.tsx<br/>- VideoThumbnail.tsx<br/>- ImageGallery.tsx<br/>- PhotoModal.tsx"]
+    
+    %% Grid Components
+    GRID_COMPONENTS["Grids<br/>- PortfolioGrid.tsx<br/>- ProductGrid.tsx"]
+    
+    %% Game/Hero Components
+    GAME_COMPONENTS["Interactive<br/>- HeroSection.tsx<br/>- GameStart.tsx<br/>- PlayButton.tsx<br/>- PressStart.tsx<br/>- Menu.tsx"]
+    
+    COMPONENTS --> NAV_COMPONENTS
+    COMPONENTS --> MEDIA_COMPONENTS
+    COMPONENTS --> GRID_COMPONENTS
+    COMPONENTS --> GAME_COMPONENTS
+    
+    %% Sanity Integration
+    SANITY_DIR["/src/sanity/<br/>📊 CMS Integration"]
+    CLIENT["client.ts<br/>Sanity Client"]
+    SCHEMAS["schemas/<br/>- portfolio.ts<br/>- product.ts<br/>- photos.ts"]
+    
+    SRC --> SANITY_DIR
+    SANITY_DIR --> CLIENT
+    SANITY_DIR --> SCHEMAS
+    
+    %% Data Flow Arrows
+    SANITY -.->|"Fetch Content"| CLIENT
+    CLIENT -.->|"Portfolio Data"| PORTFOLIO_PAGE
+    CLIENT -.->|"Portfolio Data"| PORTFOLIO_DETAIL
+    CLIENT -.->|"Product Data"| SHOP_PAGE
+    CLIENT -.->|"Product Data"| PRODUCT_DETAIL
+    CLIENT -.->|"Photo Data"| PHOTOS_PAGE
+    CLIENT -.->|"Photo Data"| PHOTO_DETAIL
+    
+    %% Static Asset Usage
+    IMAGES -.->|"Profile Photo"| ABOUT
+    VIDEOS -.->|"Hero Video"| HOME
+    LOGOS -.->|"Brand Assets"| NAV_COMPONENTS
+    IMAGES -.->|"Footer Logo"| NAV_COMPONENTS
+    
+    %% External Service Integration
+    APPLE -.->|"Embed Playlists"| LISTEN
+    INSTAGRAM -.->|"Social Embed"| CONTACT
+    
+    %% Component Usage
+    NAV_COMPONENTS -.->|"Navigation"| HOME
+    NAV_COMPONENTS -.->|"Navigation"| ABOUT
+    NAV_COMPONENTS -.->|"Navigation"| PORTFOLIO_PAGE
+    NAV_COMPONENTS -.->|"Navigation"| SHOP_PAGE
+    
+    GAME_COMPONENTS -.->|"Interactive Hero"| HOME
+    GRID_COMPONENTS -.->|"Display Items"| PORTFOLIO_PAGE
+    GRID_COMPONENTS -.->|"Display Products"| SHOP_PAGE
+    MEDIA_COMPONENTS -.->|"Media Display"| PORTFOLIO_DETAIL
+    MEDIA_COMPONENTS -.->|"Image Gallery"| PRODUCT_DETAIL
+    
+    %% Revalidation Flow
+    SANITY -.->|"Webhook"| REVALIDATE
+    REVALIDATE -.->|"Clear Cache"| PORTFOLIO_PAGE
+    REVALIDATE -.->|"Clear Cache"| SHOP_PAGE
+    
+    %% Studio Integration
+    STUDIO["studio/[[...tool]]/page.tsx<br/>🎛️ Sanity Studio"]
+    APP --> STUDIO
+    STUDIO -.->|"Content Management"| SANITY
+    
+    %% Layout and Global Styles
+    LAYOUT["layout.tsx<br/>🎨 Root Layout"]
+    GLOBALS["globals.css<br/>🎨 Global Styles"]
+    
+    APP --> LAYOUT
+    APP --> GLOBALS
+    
+    %% Styling
+    classDef external fill:#e1f5fe
+    classDef pages fill:#f3e5f5
+    classDef components fill:#e8f5e8
+    classDef assets fill:#fff3e0
+    classDef api fill:#ffebee
+    classDef sanity fill:#f1f8ff
+    
+    class SANITY,APPLE,INSTAGRAM external
+    class HOME,ABOUT,PORTFOLIO_PAGE,PORTFOLIO_DETAIL,SHOP_PAGE,PRODUCT_DETAIL,PHOTOS_PAGE,PHOTO_DETAIL,LISTEN,CONTACT,TERMS,STUDIO pages
+    class NAV_COMPONENTS,MEDIA_COMPONENTS,GRID_COMPONENTS,GAME_COMPONENTS components
+    class PUBLIC,IMAGES,VIDEOS,LOGOS assets
+    class CHECKOUT,REVALIDATE api
+    class SANITY_DIR,CLIENT,SCHEMAS sanity
+
+    
+
+Here's a breakdown of the key elements:
+
+## **Data Sources & External Services**
+- **Sanity CMS**: Manages portfolio items, products, and photo collections
+- **Apple Music**: Provides embedded playlists for the listen page
+- **Instagram**: Social media embed on the contact page
+
+## **Static Assets (/public)**
+- **Images**: Profile photos, artwork, logos
+- **Videos**: Hero section video content
+- **Brand Assets**: Logos, icons, and social media images
+
+## **Application Structure (/src)**
+
+### **Pages (App Router)**
+- **Home**: Interactive hero with game-like interface
+- **Portfolio**: Grid view and detailed item pages
+- **Shop**: Product catalog and individual product pages
+- **Photos**: Photo collection galleries
+- **About/Contact/Listen**: Content and media pages
+
+### **Components**
+- **Navigation**: NavBar, HomeNavBar, Footer
+- **Media**: Video players, image galleries, photo modals
+- **Grids**: Portfolio and product display components
+- **Interactive**: Game-style home page components
+
+### **API Routes**
+- **Checkout**: Handles payment processing
+- **Revalidate**: Manages cache invalidation via Sanity webhooks
+
+## **Data Flow**
+1. **Content Creation**: Editors use Sanity Studio to manage content
+2. **Data Fetching**: Pages fetch data from Sanity via the client
+3. **Cache Management**: Webhooks trigger revalidation when content changes
+4. **Static Assets**: Images and videos served directly from /public
+5. **External Embeds**: Apple Music and Instagram content embedded directly
+
+The architecture follows Next.js 13+ App Router patterns with ISR (Incremental Static Regeneration) for optimal performance and SEO.
