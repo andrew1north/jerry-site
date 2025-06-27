@@ -5,18 +5,29 @@ import PressStart from './PressStart';
 import PlayButton from './PlayButton';
 import Menu from './Menu';
 
-export default function GameStart() {
+interface GameStartProps {
+  forceVisible?: boolean;
+}
+
+export default function GameStart({ forceVisible = false }: GameStartProps) {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const timer = setTimeout(() => {
+    
+    if (forceVisible) {
+      // Show immediately when autoplay is blocked
       setIsVisible(true);
-    }, 6910);
-    return () => clearTimeout(timer);
-  }, []);
+    } else {
+      // Normal behavior with delay
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 6910);
+      return () => clearTimeout(timer);
+    }
+  }, [forceVisible]);
 
   const handlePlayClick = () => {
     setIsVisible(false);
@@ -29,6 +40,15 @@ export default function GameStart() {
     }
     
     if (videoElement) {
+      // If this was triggered by low power mode detection, start the video
+      if (forceVisible) {
+        videoElement.play().catch(error => {
+          console.error('Video play failed:', error);
+        });
+        // Don't hide the video in low power mode, let it play normally
+        return;
+      }
+      
       videoElement.style.transform = 'translateY(-100%)';
       videoElement.style.transition = 'all 1s ease-in-out';
       videoElement.style.opacity = '0';
@@ -50,7 +70,7 @@ export default function GameStart() {
           onClick={handlePlayClick}
         />
       </div>
-      {showMenu && (
+      {showMenu && !forceVisible && (
         <div className="fixed inset-0 z-50">
           <Menu />
         </div>
