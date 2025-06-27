@@ -5,18 +5,29 @@ import PressStart from './PressStart';
 import PlayButton from './PlayButton';
 import Menu from './Menu';
 
-export default function GameStart() {
+interface GameStartProps {
+  forceVisible?: boolean;
+}
+
+export default function GameStart({ forceVisible = false }: GameStartProps) {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const timer = setTimeout(() => {
+    
+    if (forceVisible) {
+      // Show immediately when autoplay is blocked
       setIsVisible(true);
-    }, 6910);
-    return () => clearTimeout(timer);
-  }, []);
+    } else {
+      // Normal behavior with delay
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 6910);
+      return () => clearTimeout(timer);
+    }
+  }, [forceVisible]);
 
   const handlePlayClick = () => {
     setIsVisible(false);
@@ -28,12 +39,19 @@ export default function GameStart() {
       headerElement.style.transition = 'opacity 0.5s ease-out';
     }
     
-    if (videoElement) {
+    if (videoElement && !forceVisible) {
+      // Only do video transitions when autoplay is working normally
       videoElement.style.transform = 'translateY(-100%)';
       videoElement.style.transition = 'all 1s ease-in-out';
       videoElement.style.opacity = '0';
+    } else if (videoElement && forceVisible) {
+      // When autoplay is blocked, try to play but don't rely on it
+      videoElement.play().catch(error => {
+        console.error('Video play failed (expected on low power mode):', error);
+      });
     }
     
+    // Always show the menu after a delay, regardless of autoplay status
     setTimeout(() => {
       setShowMenu(true);
     }, 500);

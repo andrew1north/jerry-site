@@ -7,6 +7,9 @@ import GameStart from "./GameStart";
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isAutoplayBlocked, setIsAutoplayBlocked] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  
   const { ref: inViewRef } = useInView({
     threshold: 0.5,
   });
@@ -17,6 +20,7 @@ export default function HeroSection() {
     if (videoElement) {
       const handleError = (e: Event) => {
         console.error('Video error:', e);
+        setIsAutoplayBlocked(true);
       };
       
       const handleLoadedData = () => {
@@ -28,6 +32,7 @@ export default function HeroSection() {
         if (playPromise !== undefined) {
           playPromise.catch(error => {
             console.log('Autoplay failed after load:', error);
+            setIsAutoplayBlocked(true);
           });
         }
       };
@@ -38,32 +43,50 @@ export default function HeroSection() {
         }
       };
 
-      const handleSuspend = () => {
-        console.log('Video suspended (likely Low Power Mode or autoplay blocked)');
-      };
-
       const handlePlay = () => {
         console.log('Video started playing');
+        setIsPlaying(true);
+      };
+
+      const handlePause = () => {
+        console.log('Video paused');
+        setIsPlaying(false);
+      };
+
+      // Only set autoplay blocked on actual play promise rejection or load errors
+      const handleCanPlay = () => {
+        // Last attempt to play when video can play
+        if (!isPlaying) {
+          const playPromise = videoElement.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.log('Final autoplay attempt failed:', error);
+              setIsAutoplayBlocked(true);
+            });
+          }
+        }
       };
 
       videoElement.addEventListener('error', handleError);
       videoElement.addEventListener('loadeddata', handleLoadedData);
       videoElement.addEventListener('timeupdate', handleTimeUpdate);
-      videoElement.addEventListener('suspend', handleSuspend);
       videoElement.addEventListener('play', handlePlay);
+      videoElement.addEventListener('pause', handlePause);
+      videoElement.addEventListener('canplay', handleCanPlay);
       
-      // Load the video (this was in your original code)
+      // Load the video
       videoElement.load();
 
       return () => {
         videoElement.removeEventListener('error', handleError);
         videoElement.removeEventListener('loadeddata', handleLoadedData);
         videoElement.removeEventListener('timeupdate', handleTimeUpdate);
-        videoElement.removeEventListener('suspend', handleSuspend);
         videoElement.removeEventListener('play', handlePlay);
+        videoElement.removeEventListener('pause', handlePause);
+        videoElement.removeEventListener('canplay', handleCanPlay);
       };
     }
-  }, []);
+  }, [isPlaying]);
 
   return (
     <div ref={inViewRef} className="relative min-h-[200px] h-screen w-full overflow-hidden bg-black">
@@ -72,7 +95,7 @@ export default function HeroSection() {
         ref={videoRef}
         className={`absolute w-full h-full object-cover transition-all duration-1000 ease-in-out
           min-h-[600px] scale-[1.02]
-          ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          ${isLoaded && !isAutoplayBlocked ? 'opacity-100' : 'opacity-0'}`}
         muted
         playsInline
         autoPlay
@@ -83,11 +106,19 @@ export default function HeroSection() {
         Your browser does not support the video tag.
       </video>
 
+      {/* Static Poster Image (shown when autoplay is blocked) */}
+      {isAutoplayBlocked && (
+        <div 
+          className="absolute w-full h-full object-cover min-h-[600px] scale-[1.02] bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/hero-poster.jpg')" }}
+        />
+      )}
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/30" />
       
-      {/* GameStart component */}
-      <GameStart />
+      {/* GameStart component - pass isAutoplayBlocked to show immediately */}
+      <GameStart forceVisible={isAutoplayBlocked} />
     </div>
   );
 } 
