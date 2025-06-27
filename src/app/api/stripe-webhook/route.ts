@@ -37,8 +37,9 @@ export async function POST(request: Request) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       
-      // Extract product ID from metadata
+      // Extract product ID and size from metadata
       const productId = session.metadata?.productId;
+      const selectedSize = session.metadata?.selectedSize;
       
       if (!productId) {
         console.error("No productId found in session metadata");
@@ -47,6 +48,8 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
+
+      console.log(`Processing order for product: ${productId}${selectedSize ? ` (Size: ${selectedSize})` : ''}`);
 
       try {
         // Deduct inventory in Sanity

@@ -6,9 +6,11 @@ type CheckoutButtonProps = {
   productId: string;
   availableForCheckout?: boolean;
   quantityAvailable?: number;
+  selectedSize?: string | null;
+  requiresSize?: boolean;
 };
 
-export default function CheckoutButton({ productId, availableForCheckout, quantityAvailable }: CheckoutButtonProps) {
+export default function CheckoutButton({ productId, availableForCheckout, quantityAvailable, selectedSize, requiresSize }: CheckoutButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckout = async () => {
@@ -22,6 +24,11 @@ export default function CheckoutButton({ productId, availableForCheckout, quanti
       return;
     }
 
+    if (requiresSize && !selectedSize) {
+      alert('Please select a size before adding to cart.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -30,7 +37,10 @@ export default function CheckoutButton({ productId, availableForCheckout, quanti
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ 
+          productId,
+          selectedSize: selectedSize || undefined
+        }),
       });
 
       const { sessionId, error } = await response.json();
@@ -60,6 +70,7 @@ export default function CheckoutButton({ productId, availableForCheckout, quanti
   const isOutOfStock = quantityAvailable !== undefined && quantityAvailable <= 0;
   const isUnavailable = !availableForCheckout;
   const isLowStock = quantityAvailable !== undefined && quantityAvailable > 0 && quantityAvailable <= 5;
+  const needsSizeSelection = requiresSize && !selectedSize;
 
   if (isUnavailable) {
     return (
@@ -93,10 +104,14 @@ export default function CheckoutButton({ productId, availableForCheckout, quanti
     <div className="w-full">
       <button 
         onClick={handleCheckout}
-        disabled={isLoading}
-        className="w-full bg-black text-white py-3 mb-2 uppercase hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        disabled={isLoading || needsSizeSelection}
+        className={`w-full py-3 mb-2 uppercase transition-colors ${
+          needsSizeSelection 
+            ? 'bg-gray-400 text-white cursor-not-allowed' 
+            : 'bg-black text-white hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed'
+        }`}
       >
-        {isLoading ? 'LOADING...' : 'BUY NOW'}
+        {isLoading ? 'LOADING...' : needsSizeSelection ? 'SELECT SIZE FIRST' : 'BUY NOW'}
       </button>
       {isLowStock && (
         <p className="text-xs text-orange-600 text-center font-medium">
@@ -108,9 +123,6 @@ export default function CheckoutButton({ productId, availableForCheckout, quanti
           In stock ({quantityAvailable} available)
         </p>
       )}
-      <p className="text-xs text-gray-500 text-center mt-1">
-        Reserved for 30 minutes during checkout
-      </p>
     </div>
   );
 } 

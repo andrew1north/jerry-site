@@ -5,7 +5,7 @@ import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 import ImageGallery from './ImageGallery';
-import CheckoutButton from './CheckoutButton';
+import ProductClient from './ProductClient';
 
 type Product = {
   _id: string;
@@ -20,6 +20,10 @@ type Product = {
   };
   availableForCheckout: boolean;
   quantityAvailable?: number;
+  sizing?: {
+    hasSizing?: boolean;
+    options?: string[];
+  };
   details?: {
     detailedDescription?: string;
     features?: string[];
@@ -53,6 +57,10 @@ async function getProduct(id: string): Promise<Product | null> {
     price,
     availableForCheckout,
     quantityAvailable,
+    sizing {
+      hasSizing,
+      options
+    },
     "mainImage": {
       "asset": {
         "url": mainImage.asset->url
@@ -144,12 +152,8 @@ export default async function ProductPage(props: Props) {
             <p className="text-xl font-bold mb-4">${product.price?.toFixed(2)}</p>
             <p className="mb-6 uppercase">{product.description}</p>
             
-            {/* Add to Cart Button */}
-            <CheckoutButton 
-              productId={product._id}
-              availableForCheckout={product.availableForCheckout}
-              quantityAvailable={product.quantityAvailable}
-            />
+            {/* Size Selection and Checkout */}
+            <ProductClient product={product} />
             
             {/* Product Details Section */}
             <div className="border-t pt-6 mb-6">
