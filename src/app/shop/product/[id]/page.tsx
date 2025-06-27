@@ -5,40 +5,40 @@ import { client } from "@/sanity/client";
 import { groq } from "next-sanity";
 import { notFound } from "next/navigation";
 import ImageGallery from './ImageGallery';
-
-type ProductDimensions = {
-  width?: string;
-  depth?: string;
-  height?: string;
-  weight?: string;
-  length?: string;
-  inseam?: string;
-  waist?: string;
-  rise?: string;
-  size?: string;
-  legOpening?: string;
-  armOpening?: string;
-  shoulderToSleeve?: string;
-};
-
-type ProductDetails = {
-  detailedDescription: string;
-  features: string[];
-  images: string[];
-  dimensions: ProductDimensions;
-};
+import CheckoutButton from './CheckoutButton';
 
 type Product = {
   _id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  mainImage: {
-    asset: {
-      url: string;
+  mainImage?: {
+    asset?: {
+      url?: string;
+    };
+    current: string;
+  };
+  availableForCheckout: boolean;
+  quantityAvailable?: number;
+  details?: {
+    detailedDescription?: string;
+    features?: string[];
+    images?: string[];
+    dimensions?: {
+      width?: string;
+      depth?: string;
+      height?: string;
+      weight?: string;
+      length?: string;
+      inseam?: string;
+      waist?: string;
+      rise?: string;
+      size?: string;
+      legOpening?: string;
+      armOpening?: string;
+      shoulderToSleeve?: string;
     };
   };
-  details: ProductDetails;
   slug: {
     current: string;
   };
@@ -51,6 +51,8 @@ async function getProduct(id: string): Promise<Product | null> {
     name,
     description,
     price,
+    availableForCheckout,
+    quantityAvailable,
     "mainImage": {
       "asset": {
         "url": mainImage.asset->url
@@ -143,9 +145,11 @@ export default async function ProductPage(props: Props) {
             <p className="mb-6 uppercase">{product.description}</p>
             
             {/* Add to Cart Button */}
-            <button className="w-full bg-black text-white py-3 mb-8 uppercase">
-              ADD TO CART
-            </button>
+            <CheckoutButton 
+              productId={product._id}
+              availableForCheckout={product.availableForCheckout}
+              quantityAvailable={product.quantityAvailable}
+            />
             
             {/* Product Details Section */}
             <div className="border-t pt-6 mb-6">
