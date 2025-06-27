@@ -39,21 +39,19 @@ export default function GameStart({ forceVisible = false }: GameStartProps) {
       headerElement.style.transition = 'opacity 0.5s ease-out';
     }
     
-    if (videoElement) {
-      // If this was triggered by low power mode detection, start the video
-      if (forceVisible) {
-        videoElement.play().catch(error => {
-          console.error('Video play failed:', error);
-        });
-        // Don't hide the video in low power mode, let it play normally
-        return;
-      }
-      
+    if (videoElement && !forceVisible) {
+      // Only do video transitions when autoplay is working normally
       videoElement.style.transform = 'translateY(-100%)';
       videoElement.style.transition = 'all 1s ease-in-out';
       videoElement.style.opacity = '0';
+    } else if (videoElement && forceVisible) {
+      // When autoplay is blocked, try to play but don't rely on it
+      videoElement.play().catch(error => {
+        console.error('Video play failed (expected on low power mode):', error);
+      });
     }
     
+    // Always show the menu after a delay, regardless of autoplay status
     setTimeout(() => {
       setShowMenu(true);
     }, 500);
@@ -70,7 +68,7 @@ export default function GameStart({ forceVisible = false }: GameStartProps) {
           onClick={handlePlayClick}
         />
       </div>
-      {showMenu && !forceVisible && (
+      {showMenu && (
         <div className="fixed inset-0 z-50">
           <Menu />
         </div>
