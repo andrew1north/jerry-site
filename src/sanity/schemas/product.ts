@@ -66,7 +66,7 @@ const productSchema = {
             type: 'array',
             of: [{ type: 'string' }],
             description: 'Add available sizes (e.g., Small, Medium, Large, XS, 32x34, etc.)',
-            hidden: ({ parent }: { parent: any }) => !parent?.hasSizing
+            hidden: ({ parent }: { parent?: { hasSizing?: boolean } }) => !parent?.hasSizing
           }
         ]
       },
