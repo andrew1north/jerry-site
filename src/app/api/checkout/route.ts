@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: Request) {
   try {
-    const { productId } = await request.json();
+    const { productId, selectedSize } = await request.json();
 
     // Fetch product from Sanity with inventory check
     const product = await client.fetch(
@@ -40,6 +40,10 @@ export async function POST(request: Request) {
     }
 
     // Create Stripe checkout session with 30-minute expiration
+    const productDescription = selectedSize 
+      ? `${product.description || ""} - Size: ${selectedSize}`.trim()
+      : product.description || "";
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -47,8 +51,8 @@ export async function POST(request: Request) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: product.name,
-              description: product.description || "",
+              name: selectedSize ? `${product.name} (${selectedSize})` : product.name,
+              description: productDescription,
               images: product.imageUrl ? [product.imageUrl] : [],
             },
             unit_amount: Math.round(product.price * 100), // Convert to cents
@@ -62,6 +66,7 @@ export async function POST(request: Request) {
       expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutes from now
       metadata: {
         productId: product._id,
+        selectedSize: selectedSize || "",
       },
     });
 

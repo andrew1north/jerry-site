@@ -48,6 +48,29 @@ const productSchema = {
         validation: (Rule: Rule) => Rule.min(0).integer()
       },
       {
+        name: 'sizing',
+        title: 'Product Sizing',
+        type: 'object',
+        description: 'Configure sizing options for this product',
+        fields: [
+          {
+            name: 'hasSizing',
+            title: 'Has Size Options',
+            type: 'boolean',
+            description: 'Enable this if the product comes in different sizes',
+            initialValue: false
+          },
+          {
+            name: 'options',
+            title: 'Size Options',
+            type: 'array',
+            of: [{ type: 'string' }],
+            description: 'Add available sizes (e.g., Small, Medium, Large, XS, 32x34, etc.)',
+            hidden: ({ parent }: { parent?: { hasSizing?: boolean } }) => !parent?.hasSizing
+          }
+        ]
+      },
+      {
         name: 'mainImage',
         title: 'Main Image',
         type: 'image',
