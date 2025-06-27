@@ -18,8 +18,6 @@ export default function HeroSection() {
     const videoElement = videoRef.current;
     
     if (videoElement) {
-      let autoplayTimeout: NodeJS.Timeout;
-      
       const handleError = (e: Event) => {
         console.error('Video error:', e);
         setIsAutoplayBlocked(true);
@@ -28,14 +26,6 @@ export default function HeroSection() {
       const handleLoadedData = () => {
         console.log('Video loaded successfully');
         setIsLoaded(true);
-        
-        // Set timeout to detect if autoplay doesn't start
-        autoplayTimeout = setTimeout(() => {
-          if (!isPlaying) {
-            console.log('Autoplay timeout - likely blocked');
-            setIsAutoplayBlocked(true);
-          }
-        }, 1000);
         
         // Try to play after the video is loaded
         const playPromise = videoElement.play();
@@ -53,17 +43,9 @@ export default function HeroSection() {
         }
       };
 
-      const handleSuspend = () => {
-        console.log('Video suspended (likely Low Power Mode or autoplay blocked)');
-        setIsAutoplayBlocked(true);
-      };
-
       const handlePlay = () => {
         console.log('Video started playing');
         setIsPlaying(true);
-        if (autoplayTimeout) {
-          clearTimeout(autoplayTimeout);
-        }
       };
 
       const handlePause = () => {
@@ -71,26 +53,37 @@ export default function HeroSection() {
         setIsPlaying(false);
       };
 
+      // Only set autoplay blocked on actual play promise rejection or load errors
+      const handleCanPlay = () => {
+        // Last attempt to play when video can play
+        if (!isPlaying) {
+          const playPromise = videoElement.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.log('Final autoplay attempt failed:', error);
+              setIsAutoplayBlocked(true);
+            });
+          }
+        }
+      };
+
       videoElement.addEventListener('error', handleError);
       videoElement.addEventListener('loadeddata', handleLoadedData);
       videoElement.addEventListener('timeupdate', handleTimeUpdate);
-      videoElement.addEventListener('suspend', handleSuspend);
       videoElement.addEventListener('play', handlePlay);
       videoElement.addEventListener('pause', handlePause);
+      videoElement.addEventListener('canplay', handleCanPlay);
       
       // Load the video
       videoElement.load();
 
       return () => {
-        if (autoplayTimeout) {
-          clearTimeout(autoplayTimeout);
-        }
         videoElement.removeEventListener('error', handleError);
         videoElement.removeEventListener('loadeddata', handleLoadedData);
         videoElement.removeEventListener('timeupdate', handleTimeUpdate);
-        videoElement.removeEventListener('suspend', handleSuspend);
         videoElement.removeEventListener('play', handlePlay);
         videoElement.removeEventListener('pause', handlePause);
+        videoElement.removeEventListener('canplay', handleCanPlay);
       };
     }
   }, [isPlaying]);
