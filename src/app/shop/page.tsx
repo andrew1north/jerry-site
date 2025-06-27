@@ -12,6 +12,7 @@ interface Product {
   name: string;
   description?: string;
   price: number;
+  availableForCheckout?: boolean;
   imageUrl?: string;
   details?: {
     detailedDescription?: string;
@@ -41,6 +42,7 @@ async function getProducts(): Promise<Product[]> {
     name,
     description,
     price,
+    availableForCheckout,
     "imageUrl": mainImage.asset->url,
     details {
       detailedDescription,
@@ -67,25 +69,33 @@ async function getProducts(): Promise<Product[]> {
 }
 
 export default async function ShopPage() {
-  const products = await getProducts();
-  
+  const products: Product[] = await getProducts();
+
+  // Transform and sort the data - available products first, then unavailable
+  const productGridData = products
+    .map(product => ({
+      id: product._id,
+      name: product.name,
+      description: product.description || '',
+      price: product.price,
+      imageUrl: product.imageUrl || '/images/placeholder.jpg',
+      availableForCheckout: product.availableForCheckout
+    }))
+    .sort((a, b) => {
+      // Available products (true) come first, unavailable (false/undefined) come last
+      if (a.availableForCheckout && !b.availableForCheckout) return -1;
+      if (!a.availableForCheckout && b.availableForCheckout) return 1;
+      // If both have same availability status, maintain original order
+      return 0;
+    });
+
   return (
     <>
       <NavBar />
-      <div className="pt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-4xl font-bold mb-8">Shop</h1>
-          {products && products.length > 0 ? (
-            <ProductGrid products={products.map((product: Product) => ({
-              id: product._id,
-              name: product.name,
-              description: product.description || "",
-              price: product.price,
-              imageUrl: product.imageUrl || "/images/placeholder.jpg"
-            }))} />
-          ) : (
-            <p className="text-center text-gray-500">No products found. Add some in Sanity Studio!</p>
-          )}
+      <div className="min-h-screen pt-16">
+        <div className="container mx-auto py-8">
+          <h1 className="text-3xl font-bold text-center mb-8 uppercase">Shop</h1>
+          <ProductGrid products={productGridData} />
         </div>
       </div>
     </>

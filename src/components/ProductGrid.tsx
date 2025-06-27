@@ -10,6 +10,7 @@ type Product = {
   description: string;
   price: number;
   imageUrl: string;
+  availableForCheckout?: boolean;
 };
 
 type ProductGridProps = {
@@ -35,7 +36,9 @@ export default function ProductGrid({ products }: ProductGridProps) {
                 duration: 0.5,
                 delay: index * 0.1,
               }}
-              className="group relative hover:bg-gray-50 bg-white h-full"
+              className={`group relative hover:bg-gray-50 bg-white h-full ${
+                !product.availableForCheckout ? 'opacity-75' : ''
+              }`}
             >
               <div className="flex flex-col h-full">
                 <div className="relative aspect-[3/4]">
@@ -45,11 +48,21 @@ export default function ProductGrid({ products }: ProductGridProps) {
                     fill
                     className="object-contain p-4"
                   />
+                  {!product.availableForCheckout && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="bg-gray-800 text-white px-3 py-1 text-sm font-medium rounded">
+                        UNAVAILABLE
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-4 flex-1">
                   <h3 className="text-sm text-gray-500">{product.name}</h3>
                   <p className="text-sm font-light">{product.description}</p>
                   <p className="text-sm">${product.price.toFixed(2)}</p>
+                  {!product.availableForCheckout && (
+                    <p className="text-xs text-gray-400 mt-1">Not available for purchase</p>
+                  )}
                 </div>
               </div>
             </motion.div>

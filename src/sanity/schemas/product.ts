@@ -33,6 +33,21 @@ const productSchema = {
         validation: (Rule: Rule) => Rule.required().min(0)
       },
       {
+        name: 'availableForCheckout',
+        title: 'Available for Checkout',
+        type: 'boolean',
+        description: 'Enable this to allow customers to purchase this product',
+        initialValue: false
+      },
+      {
+        name: 'quantityAvailable',
+        title: 'Quantity Available',
+        type: 'number',
+        description: 'Number of items available for sale (set to 0 for out of stock)',
+        initialValue: 0,
+        validation: (Rule: Rule) => Rule.min(0).integer()
+      },
+      {
         name: 'mainImage',
         title: 'Main Image',
         type: 'image',

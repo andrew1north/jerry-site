@@ -22,6 +22,14 @@ export default function HeroSection() {
       const handleLoadedData = () => {
         console.log('Video loaded successfully');
         setIsLoaded(true);
+        
+        // Try to play after the video is loaded
+        const playPromise = videoElement.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log('Autoplay failed after load:', error);
+          });
+        }
       };
 
       const handleTimeUpdate = () => {
@@ -30,15 +38,29 @@ export default function HeroSection() {
         }
       };
 
+      const handleSuspend = () => {
+        console.log('Video suspended (likely Low Power Mode or autoplay blocked)');
+      };
+
+      const handlePlay = () => {
+        console.log('Video started playing');
+      };
+
       videoElement.addEventListener('error', handleError);
       videoElement.addEventListener('loadeddata', handleLoadedData);
       videoElement.addEventListener('timeupdate', handleTimeUpdate);
+      videoElement.addEventListener('suspend', handleSuspend);
+      videoElement.addEventListener('play', handlePlay);
+      
+      // Load the video (this was in your original code)
       videoElement.load();
 
       return () => {
         videoElement.removeEventListener('error', handleError);
         videoElement.removeEventListener('loadeddata', handleLoadedData);
         videoElement.removeEventListener('timeupdate', handleTimeUpdate);
+        videoElement.removeEventListener('suspend', handleSuspend);
+        videoElement.removeEventListener('play', handlePlay);
       };
     }
   }, []);
@@ -54,9 +76,10 @@ export default function HeroSection() {
         muted
         playsInline
         autoPlay
+        loop
         preload="auto"
       >
-        <source src="/videos/intro_crop.mp4" type="video/mp4" />
+        <source src="/videos/intro_crop_noaudio.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
