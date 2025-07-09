@@ -61,6 +61,9 @@ export async function POST(request: Request) {
         },
       ],
       mode: "payment",
+      shipping_address_collection: {
+        allowed_countries: ["US", "CA"],
+      },
       success_url: `${request.headers.get("origin")}/shop/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.headers.get("origin")}/shop/product/${productId}`,
       expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutes from now

@@ -71,7 +71,7 @@ async function getProducts(): Promise<Product[]> {
 export default async function ShopPage() {
   const products: Product[] = await getProducts();
 
-  // Transform and sort the data - available products first, then unavailable
+  // Transform and sort the data - available products first, then unavailable, both sorted alphabetically
   const productGridData = products
     .map(product => ({
       id: product._id,
@@ -85,8 +85,8 @@ export default async function ShopPage() {
       // Available products (true) come first, unavailable (false/undefined) come last
       if (a.availableForCheckout && !b.availableForCheckout) return -1;
       if (!a.availableForCheckout && b.availableForCheckout) return 1;
-      // If both have same availability status, maintain original order
-      return 0;
+      // If both have same availability status, sort alphabetically by name
+      return a.name.localeCompare(b.name);
     });
 
   return (

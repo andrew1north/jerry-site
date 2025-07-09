@@ -46,13 +46,15 @@ export default function ProductGrid({ products }: ProductGridProps) {
                     src={product.imageUrl}
                     alt={product.name}
                     fill
-                    className="object-contain p-4"
+                    className={`object-contain p-4 ${
+                      !product.availableForCheckout ? 'grayscale opacity-50' : ''
+                    }`}
                   />
                   {!product.availableForCheckout && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="bg-gray-800 text-white px-3 py-1 text-sm font-medium rounded">
-                        UNAVAILABLE
-                      </span>
+                    <div className="absolute inset-0 bg-gray-900/30 flex items-center justify-center">
+                      <div className="bg-black/80 text-white px-4 py-2 text-sm font-bold uppercase tracking-wide rounded">
+                        Out of Stock
+                      </div>
                     </div>
                   )}
                 </div>
